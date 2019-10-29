@@ -5,11 +5,11 @@
                 <el-upload
                         class="upload-demo"
                         ref="upload"
-                        action="https://jsonplaceholder.typicode.com/posts/"
                         :on-preview="handlePreview"
                         :on-remove="handleRemove"
                         :on-change="handleChange"
                         :file-list="fileList"
+                        :http-request="uploadSectionFile"
                         :auto-upload="false">
                     <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                     <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器
@@ -38,8 +38,13 @@
         methods: {
             handleChange(file, fileList) {
                 console.log(file, fileList)
+                this.fileList = fileList
             },
-            submitUpload() {
+            uploadSectionFile(params){
+                console.log(params)
+            },
+            submitUpload(file, fileList) {
+                console.log(this.fileList)
                 const azure = require("@assets/bundle/azure-storage.file.min");
                 console.log(azure)
                 var fileService = azure.createFileService(
@@ -66,8 +71,6 @@
                                 share,
                                 swes,
                                 (error, result, response) => {
-                                    console.log('========================')
-                                    console.log(error, result, response)
                                     if (!error) {
                                     }
                                 }
@@ -81,6 +84,7 @@
                                     console.log('========================')
                                     console.log(error, result, response)
                                     if (result.name == directory) {
+                                        console.log('name')
                                         // this.$emit("huanshujuchuan", 3);
                                     }
                                 }
@@ -92,8 +96,6 @@
                         share,
                         directory,
                         (error, result, response) => {
-                            console.log('========================')
-                            console.log(error, result, response)
                             if (!error) {
                             }
                         }
