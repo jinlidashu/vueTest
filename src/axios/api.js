@@ -10,4 +10,5 @@ export default {
      */
     getDemo:params => fetch('/getDemo',params),
     getTest:params => fetch('/getTest',params),
+    getTest:params => fetch('/v1/get_storage',params),
 }

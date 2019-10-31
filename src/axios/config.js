@@ -23,6 +23,9 @@ axios.interceptors.request.use(config => {
     // if (store.state.user.token) {
     //     config.headers.Authorization = localStorage.token;
     // }
+    if(sessionStorage.code && config.url.indexOf('access_token') == -1 && config.url != '/v1/report_page'){
+        config.url = JSON.parse(JSON.stringify(config.url)) + '?access_token=' + sessionStorage.code;
+    }
     // 在发送请求之前做些什么
     return config;
 }, error => {
