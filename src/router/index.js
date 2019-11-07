@@ -15,6 +15,11 @@ const routes = [
         name: 'upload',
         component: () => import('../views/upload.vue')
       },
+        {
+            path: '/demo',
+            name: 'demo',
+            component: () => import('../views/demo.vue')
+        },
     ]
   },
   {

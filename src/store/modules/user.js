@@ -7,8 +7,8 @@
 const state = {
     asideCollapse:false,//菜单导航收起展开方式
     menuAsideList:[
-        {id: 1,powerCode: 'upload',powerName:'上传管理',iconName:'el-icon-location',
-        },
+        {id: 1,powerCode: 'upload',powerName:'上传管理',iconName:'el-icon-location'},
+        {id: 10,powerCode: 'demo',powerName:'demo',iconName:'el-icon-location'},
         {id: 2,powerCode: 'reconciliation',powerName: '对账结算',iconName:'el-icon-cherry'},
         {id: 3,powerCode: 'business', powerName: '业务统计',iconName:'el-icon-watermelon'},
         {id: 4,powerCode: 'cooperation',powerName: '合作管理',iconName:'el-icon-grape'},
