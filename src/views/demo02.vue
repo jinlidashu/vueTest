@@ -1,111 +1,132 @@
 <template>
-    <div class="hot_comment">
+    <div class="hot_video">
         <el-container>
             <el-main>
-                <div class="search-box">
-                    <el-input v-model="commentQuery" class="search-input" placeholder="请输入评论关键字"></el-input>
-                    <el-button type="success" icon="el-icon-search" @click="searchClick">搜索</el-button>
-                </div>
                 <div class="search_condition">
                     <dl>
-                        <dt>车身结构</dt>
+                        <dt>分类</dt>
                         <dd>
-                            <ul class="condition-sort-list">
-                                <li><a class="selected">不限</a></li>
-                                <li><a>两厢车</a></li>
-                                <li><a>三厢车</a></li>
-                                <li><a>掀背车</a></li>
-                                <li><a>旅行车</a></li>
-                                <li><a>硬顶车</a></li>
-                                <li><a>软顶敞篷车</a></li>
-                            </ul>
+                            <span :class="{selected: currClass== ''}" @click="handleFilterClass('')">全部</span>
+                            <span v-for="(item,index) in classList" :key="index" :class="{selected: currClass== item.value}" @click="handleFilterClass(item.value)">{{item.name}}</span>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>筛选条件</dt>
+                        <dd>
+                            <label>点赞数：</label>
+                            <el-select v-model="vfilter.points" size="small" placeholder="请选择">
+                                <el-option
+                                        v-for="item in pointsOpt"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                            <label>视频时长：</label>
+                            <el-select v-model="vfilter.duration" size="small" placeholder="请选择">
+                                <el-option
+                                        v-for="item in durationOpt"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                            <el-checkbox v-model="vfilter.relatedVideo" size="small">关联商品视频</el-checkbox>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt style="color:#f00">限豪华版使用</dt>
+                        <dd>
+                            <label><strong>观众画像筛选：</strong>男女比例：</label>
+                            <el-select v-model="vfilter.ratio" size="small" placeholder="请选择">
+                                <el-option
+                                        v-for="item in ratioOpt"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                            <label>主要年龄：</label>
+                            <el-select v-model="vfilter.age" size="small" placeholder="请选择">
+                                <el-option
+                                        v-for="item in ageOpt"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                            <label>主要地域：</label>
+                            <el-cascader v-model="vfilter.region" :options="regionOpt" @change="handleChange"></el-cascader>
                         </dd>
                     </dl>
                 </div>
-                <!--<el-tabs v-model="activeName" @tab-click="handleClick">-->
+                <div class="search_filter_box">
+                    <el-radio-group v-model="sort_radio" class="videoClassSort" size="medium">
+                        <el-radio-button label="1">综合排序</el-radio-button>
+                        <el-radio-button label="2">点赞最多</el-radio-button>
+                        <el-radio-button label="3">评论最多</el-radio-button>
+                        <el-radio-button label="4">分享最多</el-radio-button>
+                    </el-radio-group>
+                    <el-radio-group v-model="time_radio" class="videoTimeSort" size="medium">
+                        <el-radio-button label="6" >6小时</el-radio-button>
+                        <el-radio-button label="12" >12小时</el-radio-button>
+                        <el-radio-button label="24" >24小时</el-radio-button>
+                        <el-radio-button label="3" >近3天</el-radio-button>
+                        <el-radio-button label="7" >近7天</el-radio-button>
+                        <el-radio-button label="15" >近15天</el-radio-button>
+                        <el-radio-button label="30" >近30天</el-radio-button>
+                        <el-radio-button label="60" >近60天</el-radio-button>
+                        <el-radio-button label="90" >近90天</el-radio-button>
+                    </el-radio-group>
+                </div>
+                <!-- 传播指数 	视频内容	播主	点赞数	评论数	操作-->
+                <el-table :data="hotVideoData" style="width: 100%">
+                    <el-table-column prop="spreadIndex" label="传播指数" width="180">
+                        <template slot-scope="scope">
+                            <el-button type="warning" icon="el-icon-video-camera-solid">{{scope.row.spreadIndex}}</el-button>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="video_content" label="视频内容" min-width="480">
+                        <template slot-scope="scope">
+                            <div class="video_content">
+                                <img :src="scope.row.video_content.thumbUrl" alt="">
+                                <div class="video-inner">
+                                    <h5>{{scope.row.video_content.name}}</h5>
+                                    <p>视频热词：<el-tag color="#e4f0ff" v-for="(item,index) in scope.row.video_content.vhot" :key="index">{{item}}</el-tag></p>
+                                    <p>视频时长：{{scope.row.video_content.videoTime}}秒</p>
+                                </div>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="anchor" label="播主" align="center" width="200">
+                        <template slot-scope="scope">
+                            <div class="video_anchor">
+                                <h5>{{scope.row.anchor}}</h5>
+                                <p>{{scope.row.time}}</p>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="praiseNum" label="点赞数" align="center" width="120"></el-table-column>
+                    <el-table-column prop="commentNum" label="评论数" align="center" width="120"></el-table-column>
+                    <el-table-column label="操作" algin="center" width="260">
+                        <template slot-scope="scope">
+                            <el-tooltip class="item" effect="dark" content="热度分析" placement="top">
+                                <el-button type="success" icon="el-icon-s-data" circle></el-button>
+                            </el-tooltip>
 
-                <!--<el-tab-pane label="默认排序" name="first">-->
-                <!--<div class="comment_update_time">默认排序 最近更新时间：{{update_time}}</div>-->
-                <!--<el-table :data="hotCommentData" style="width: 100%">-->
-                <!--<el-table-column prop="comment" label="评论" width="380"></el-table-column>-->
-                <!--<el-table-column prop="praisePointsNum" label="近7天总点赞数" width="220"></el-table-column>-->
-                <!--<el-table-column prop="AssociatedVideoNum" label="近7天关联视频数" align="center" width="200"></el-table-column>-->
-                <!--<el-table-column prop="hotTop" label="热门视频 Top 3" min-width="300">-->
-                <!--<template slot-scope="scope">-->
-                <!--<div class="hot_list">-->
-                <!--<a target="_blank" v-for="(item,index) in scope.row.hotTop" :key="index" :href="item.url">-->
-                <!--<img :src="item.thumbUrl" alt="">-->
-                <!--<p>{{item.likeNum}}</p>-->
-                <!--<span>播放</span>-->
-                <!--</a>-->
-                <!--</div>-->
-                <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="操作" algin="center" width="100">-->
-                <!--<template slot-scope="scope">-->
-                <!--<el-tooltip class="item" effect="dark" content="热度分析" placement="top">-->
-                <!--<el-button type="success" icon="el-icon-s-data" circle></el-button>-->
-                <!--</el-tooltip>-->
-                <!--</template>-->
-                <!--</el-table-column>-->
-                <!--</el-table>-->
-                <!--<div class="comment_page"></div>-->
-                <!--</el-tab-pane>-->
-                <!--<el-tab-pane label="总点赞数最高" name="second">-->
-                <!--<div class="comment_update_time">总点赞数最高 最近更新时间：{{update_time}}</div>-->
-                <!--<el-table :data="hotCommentData" style="width: 100%">-->
-                <!--<el-table-column prop="comment" label="评论" width="380"></el-table-column>-->
-                <!--<el-table-column prop="praisePointsNum" label="近7天总点赞数" width="220"></el-table-column>-->
-                <!--<el-table-column prop="AssociatedVideoNum" label="近7天关联视频数" align="center" width="200"></el-table-column>-->
-                <!--<el-table-column prop="hotTop" label="热门视频 Top 3" min-width="300">-->
-                <!--<template slot-scope="scope">-->
-                <!--<div class="hot_list">-->
-                <!--<a target="_blank" v-for="(item,index) in scope.row.hotTop" :key="index" :href="item.url">-->
-                <!--<img :src="item.thumbUrl" alt="">-->
-                <!--<p>{{item.likeNum}}</p>-->
-                <!--<span>播放</span>-->
-                <!--</a>-->
-                <!--</div>-->
-                <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="操作" algin="center" width="100">-->
-                <!--<template slot-scope="scope">-->
-                <!--<el-tooltip class="item" effect="dark" content="热度分析" placement="top">-->
-                <!--<el-button type="success" icon="el-icon-s-data" circle></el-button>-->
-                <!--</el-tooltip>-->
-                <!--</template>-->
-                <!--</el-table-column>-->
-                <!--</el-table>-->
-                <!--<div class="comment_page"></div>-->
-                <!--</el-tab-pane>-->
-                <!--<el-tab-pane label="关联视频最多" name="third">-->
-                <!--<div class="comment_update_time">关联视频最多 最近更新时间：{{update_time}}</div>-->
-                <!--<el-table :data="hotCommentData" style="width: 100%">-->
-                <!--<el-table-column prop="comment" label="评论" width="380"></el-table-column>-->
-                <!--<el-table-column prop="praisePointsNum" label="近7天总点赞数" width="220"></el-table-column>-->
-                <!--<el-table-column prop="AssociatedVideoNum" label="近7天关联视频数" align="center" width="200"></el-table-column>-->
-                <!--<el-table-column prop="hotTop" label="热门视频 Top 3" min-width="300">-->
-                <!--<template slot-scope="scope">-->
-                <!--<div class="hot_list">-->
-                <!--<a target="_blank" v-for="(item,index) in scope.row.hotTop" :key="index" :href="item.url">-->
-                <!--<img :src="item.thumbUrl" alt="">-->
-                <!--<p>{{item.likeNum}}</p>-->
-                <!--<span>播放</span>-->
-                <!--</a>-->
-                <!--</div>-->
-                <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="操作" algin="center" width="100">-->
-                <!--<template slot-scope="scope">-->
-                <!--<el-tooltip class="item" effect="dark" content="热度分析" placement="top">-->
-                <!--<el-button type="success" icon="el-icon-s-data" circle></el-button>-->
-                <!--</el-tooltip>-->
-                <!--</template>-->
-                <!--</el-table-column>-->
-                <!--</el-table>-->
-                <!--<div class="comment_page"></div>-->
-                <!--</el-tab-pane>-->
-                <!--</el-tabs>-->
+                            <el-tooltip class="item" effect="dark" content="观众分析" placement="top">
+                                <el-button type="primary" style="background: #765aff; border-color: #765aff;" icon="el-icon-user-solid" circle></el-button>
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="dark" content="播放" placement="top">
+                                <el-button type="primary" style="background: #629ce9;border-color: #629ce9;" icon="el-icon-video-camera-solid" circle></el-button>
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="dark" content="收藏" placement="top">
+                                <el-button type="warning" icon="el-icon-star-off" circle></el-button>
+                            </el-tooltip>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="video_page"></div>
             </el-main>
         </el-container>
 
@@ -114,176 +135,193 @@
 
 <script>
     export default {
-        name: "hot_comment",
+        name: "hot_video",
         data() {
             return {
-                commentQuery:'',
-                activeName: 'first',
-                search_result:'136,387,666',
-                update_time:'2019-11-07 06:18',
-                hotCommentData:[
+                commentQuery: '',
+                sort_radio:'1',
+                time_radio:'24',
+                currClass:'',
+                classList: [
+                    {name: '网红美女', value: '1'}, {name: '网红帅哥', value: '2'}, {name: '搞笑', value: '3'}, {name: '情感',value: '4'}, {name: '剧情', value: '5'}, {name: '美食', value: '6'}, {name: '美妆', value: '7'}, {name: '种草',value: '8'},{name: '穿搭', value: '9'}, {name: '明星', value: '10'}, {name: '影视娱乐', value: '11'}, {name: '游戏',value: '12'}, {name: '宠物', value: '13'}, {name: '音乐', value: '14'}, {name: '舞蹈', value: '15'}, {name: '萌娃',value: '16'}, {name: '生活', value: '17'}, {name: '健康', value: '18'}, {name: '体育', value: '19'}, {name: '旅行',value: '20'}, {name: '动漫', value: '21'}, {name: '创意', value: '22'}, {name: '时尚', value: '23'}, {name: '母婴育儿',value: '24'}, {name: '教育', value: '25'}, {name: '职场教育', value: '26'}, {name: '汽车', value: '27'}, {name: '家居',value: '28'}, {name: '科技', value: '29'}, {name: '摄影教学', value: '30'}, {name: '政务',value: '31'}, {name: '知识资讯类', value: '32'}, {name: '办公软件', value: '33'}, {name: '文学艺术', value: '34'}],
+                vfilter: {
+                    points: '',
+                    duration: '',
+                    relatedVideo: '',
+                    ratio: '',
+                    age: '',
+                    region: '',
+                },
+                pointsOpt: [
+                    {label: '全部', value: 'all'},
+                    {label: '<1万', value: '1'},
+                    {label: '1万~5万', value: '1-5'},
+                    {label: '5万~10万', value: '5-10'},
+                    {label: '10万~50万', value: '10-50'},
+                    {label: '50万~100万', value: '50-100'},
+                    {label: '100万~200万', value: '100-200'},
+                    {label: '>200万', value: '200+'},
+                ],
+                durationOpt: [
+                    {label: '不限', value: 'all'},
+                    {label: '15秒', value: '15'},
+                    {label: '15~30秒', value: '15-30'},
+                    {label: '30~60秒', value: '30-60'},
+                    {label: '60秒', value: '60'},
+                ],
+                ratioOpt: [
+                    {label: '全部', value: 'all'},
+                    {label: '男观众多', value: 'Male'},
+                    {label: '女观众多', value: 'female'},
+                ],
+                ageOpt: [
+                    {label: '全部', value: 'all'},
+                    {label: '6-17', value: '6-17'},
+                    {label: '18-24', value: '18-24'},
+                    {label: '25-30', value: '25-30'},
+                    {label: '31-35', value: '31-35'},
+                    {label: '36-40', value: '36-40'},
+                    {label: '41+', value: '41+'},
+                ],
+                regionOpt:[
                     {
-                        comment:'来给生活比个耶',
-                        praisePointsNum:'2037',
-                        AssociatedVideoNum :'5',
-                        hotTop:[
-                            {url:'https://www.douyin.com/share/video/6755203973554244876/?mid=6750817353375877899',likeNum:'2.4w',thumbUrl:'http://dy.liweiliang.com/temp/temp_03.jpeg'},
-                            {url:'https://www.douyin.com/share/video/6755203973554244876/?mid=6750817353375877899',likeNum:'3.4w',thumbUrl:'http://dy.liweiliang.com/temp/temp_03.jpeg'},
-                            {url:'https://www.douyin.com/share/video/6755203973554244876/?mid=6750817353375877899',likeNum:'4.4w',thumbUrl:'http://dy.liweiliang.com/temp/temp_03.jpeg'},
-                        ],
+                        value: 'beijing',
+                        label: '北京',
+                        children: [{
+                            value: 'fengtai',
+                            label: '丰台区'
+                        }, {
+                            value: 'haidian',
+                            label: '海淀区'
+                        }, {
+                            value: 'changping',
+                            label: '昌平区'
+                        }, {
+                            value: 'xicheng',
+                            label: '西城区'
+                        }]
                     },
                     {
-                        comment:'狗头军师所言极是',
-                        praisePointsNum:'1712',
-                        AssociatedVideoNum :'15',
-                        hotTop:[
-                            {url:'https://www.douyin.com/share/video/6755203973554244876/?mid=6750817353375877899',likeNum:'2.4w',thumbUrl:'http://dy.liweiliang.com/temp/temp_03.jpeg'},
-                            {url:'https://www.douyin.com/share/video/6755203973554244876/?mid=6750817353375877899',likeNum:'3.4w',thumbUrl:'http://dy.liweiliang.com/temp/temp_03.jpeg'},
-                            {url:'https://www.douyin.com/share/video/6755203973554244876/?mid=6750817353375877899',likeNum:'4.4w',thumbUrl:'http://dy.liweiliang.com/temp/temp_03.jpeg'},
-                        ],
+                        value: 'tianjin',
+                        label: '天津',
+                        children: [{
+                            value: 'beichen',
+                            label: '北辰区',
+
+                        },{
+                            value: 'hexi',
+                            label: '河西区',
+
+                        },{
+                            value: 'hedong',
+                            label: '河东区',
+
+                        }]
+                    }
+                ],
+                hotVideoData: [
+                    {
+                        spreadIndex:'84.8',
+                        video_content:{
+                            name:'#女人都喜欢😘的穿搭！寻找气质相同的你！',
+                            thumbUrl: 'http://dy.liweiliang.com/temp/temp_03.jpeg',
+                            vhot:['多少钱','衣服','谢谢','好看','外套','美女','大衣','喜欢','身材'],
+                            videoTime:'16'
+                        },
+                        anchor:'长春市远东批发一期1-43服装',
+                        time:'22 小时前',
+                        praiseNum:'9955',
+                        commentNum:'2386',
                     },
                     {
-                        comment:'试图感动富婆第一天',
-                        praisePointsNum:'5078',
-                        AssociatedVideoNum :'53',
-                        hotTop:[
-                            {url:'https://www.douyin.com/share/video/6755203973554244876/?mid=6750817353375877899',likeNum:'2.4w',thumbUrl:'http://dy.liweiliang.com/temp/temp_03.jpeg'},
-                            {url:'https://www.douyin.com/share/video/6755203973554244876/?mid=6750817353375877899',likeNum:'3.4w',thumbUrl:'http://dy.liweiliang.com/temp/temp_03.jpeg'},
-                            {url:'https://www.douyin.com/share/video/6755203973554244876/?mid=6750817353375877899',likeNum:'4.4w',thumbUrl:'http://dy.liweiliang.com/temp/temp_03.jpeg'},
-                        ],
+                        spreadIndex:'84.8',
+                        video_content:{
+                            name:'#女人都喜欢😘的穿搭！寻找气质相同的你！',
+                            thumbUrl: 'http://dy.liweiliang.com/temp/temp_03.jpeg',
+                            vhot:['多少钱','衣服','谢谢','好看','外套','美女','大衣','喜欢','身材'],
+                            videoTime:'16'
+                        },
+                        anchor:'长春市远东批发一期1-43服装',
+                        time:'22 小时前',
+                        praiseNum:'9955',
+                        commentNum:'2386',
                     },
                     {
-                        comment:'试图感动富婆第一天',
-                        praisePointsNum:'5078',
-                        AssociatedVideoNum :'53',
-                        hotTop:[
-                            {url:'https://www.douyin.com/share/video/6755203973554244876/?mid=6750817353375877899',likeNum:'2.4w',thumbUrl:'http://dy.liweiliang.com/temp/temp_03.jpeg'},
-                            {url:'https://www.douyin.com/share/video/6755203973554244876/?mid=6750817353375877899',likeNum:'3.4w',thumbUrl:'http://dy.liweiliang.com/temp/temp_03.jpeg'},
-                            {url:'https://www.douyin.com/share/video/6755203973554244876/?mid=6750817353375877899',likeNum:'4.4w',thumbUrl:'http://dy.liweiliang.com/temp/temp_03.jpeg'},
-                        ],
+                        spreadIndex:'84.8',
+                        video_content:{
+                            name:'#女人都喜欢😘的穿搭！寻找气质相同的你！',
+                            thumbUrl: 'http://dy.liweiliang.com/temp/temp_03.jpeg',
+                            vhot:['多少钱','衣服','谢谢','好看','外套','美女','大衣','喜欢','身材'],
+                            videoTime:'16'
+                        },
+                        anchor:'长春市远东批发一期1-43服装',
+                        time:'22 小时前',
+                        praiseNum:'9955',
+                        commentNum:'2386',
                     },
                     {
-                        comment:'试图感动富婆第一天',
-                        praisePointsNum:'5078',
-                        AssociatedVideoNum :'53',
-                        hotTop:[
-                            {url:'https://www.douyin.com/share/video/6755203973554244876/?mid=6750817353375877899',likeNum:'2.4w',thumbUrl:'http://dy.liweiliang.com/temp/temp_03.jpeg'},
-                            {url:'https://www.douyin.com/share/video/6755203973554244876/?mid=6750817353375877899',likeNum:'3.4w',thumbUrl:'http://dy.liweiliang.com/temp/temp_03.jpeg'},
-                            {url:'https://www.douyin.com/share/video/6755203973554244876/?mid=6750817353375877899',likeNum:'4.4w',thumbUrl:'http://dy.liweiliang.com/temp/temp_03.jpeg'},
-                        ],
+                        spreadIndex:'84.8',
+                        video_content:{
+                            name:'#女人都喜欢😘的穿搭！寻找气质相同的你！',
+                            thumbUrl: 'http://dy.liweiliang.com/temp/temp_03.jpeg',
+                            vhot:['多少钱','衣服','谢谢','好看','外套','美女','大衣','喜欢','身材'],
+                            videoTime:'16'
+                        },
+                        anchor:'长春市远东批发一期1-43服装',
+                        time:'22 小时前',
+                        praiseNum:'9955',
+                        commentNum:'2386',
                     },
+                    {
+                        spreadIndex:'84.8',
+                        video_content:{
+                            name:'#女人都喜欢😘的穿搭！寻找气质相同的你！',
+                            thumbUrl: 'http://dy.liweiliang.com/temp/temp_03.jpeg',
+                            vhot:['多少钱','衣服','谢谢','好看','外套','美女','大衣','喜欢','身材'],
+                            videoTime:'16'
+                        },
+                        anchor:'长春市远东批发一期1-43服装',
+                        time:'22 小时前',
+                        praiseNum:'9955',
+                        commentNum:'2386',
+                    },
+
 
                 ]
             }
         },
-        methods:{
-            searchClick(){
+        methods: {
+            searchClick() {
 
             },
             handleClick(tab, event) {
                 console.log(tab, event);
+            },
+            handleFilterClass(params){
+                this.currClass = params;
             }
         }
     }
 </script>
 
 <style lang="stylus" scoped>
-    .hot_comment
+    .hot_video
         width 100%
-    .search-box
-        display flex
-        padding 20px 20px
-        margin-bottom 20px
-        background #fff
-        .search-input
-            width 500px
-            margin-right 15px
-    .comment_sort_box
-        height 50px
-        line-height 50px
-        margin 20px 0
-    .comment_update_time
-        height 50px
-        line-height 50px
-        text-align right
-    .hot_list
-        a
-            position relative
-            display inline-block
-            width 72px
-            height 96px
-            margin: 4px 2px;
-            /*border-radius 4px*/
-            cursor pointer
-            text-decoration none
-            &:hover:after{
-                position absolute
-                top 0
-                left 0
-                content ''
-                width 100%
-                height 100%
-                background rgba(0,0,0,.3)
-                border-radius 4px 4px 0 0
-            }
-            &:hover
-                span
-                    display: block
-            span
-                display none
-                cursor pointer
-                position absolute
-                left 12px
-                top 10px
-                background #52c41a
-                border-radius 4px
-                width 48px
-                height 30px
-                color #fff
-                text-align center
-                line-height 30px
-                z-index 4
-                &:hover
-                    background #4db619
-            img
-                position absolute
-                top 0
-                left 0
-                display block
-                width 72px
-                height 96px
-                border 0
-                border-radius 4px
-            p
-                position absolute
-                left 0
-                bottom 3px
-                width 100%
-                line-height 20px
-                padding-left 25px
-                margin 0
-                color #fff
-                box-sizing border-box
-                background url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6ODg0MTIxMzQwMTA3MTFFQUEwMDFCRDFERDk5M0Y1NTIiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6ODg0MTIxMzMwMTA3MTFFQUEwMDFCRDFERDk5M0Y1NTIiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjc4Q0MyQ0Q0QUVBODExRTlBMkYzQTUzMTdGRkE5MEU5IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjc4Q0MyQ0Q1QUVBODExRTlBMkYzQTUzMTdGRkE5MEU5Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+g5SSDAAAAM5JREFUeNpi+P//PwMQswBxDhCfBeIvQPwEiGcBsTQQCwFxKxBfAuLXQHwZiGuBmAOkF6Z543/s4B0Qv8EhdwRkCMiArP/kgzJGkLMZGBiMGMgDF0EGfAYyeMg04AsTkPjLQD74BTLgEgUGnAMZsJoCA5aCYoELiB+TEQNXQEmAAZqQbIH4FwmaPwGxFiwhwXA6EP8lQvN3IPaG6UM2AIRjgfgnHs0fgNgZWQ+6ASBsCsR3sGgG5RNldPXYDIAFbCvUuaDMVQHNMxhqAQIMABkLFsp42WF9AAAAAElFTkSuQmCC") no-repeat 5px center
-    .comment_page
-        height 50px
-        margin-bottom 15px
-</style>
-<style lang="stylus">
-    .hot_comment
         .search_condition
             margin 20px 0 20px
             border-radius 3px
             padding 12px 20px
             background #fff
-            box-shadow 0 2px 20px 0 rgba(82,196,26,.14)
+            //box-shadow 0 2px 20px 0 rgba(82, 196, 26, .14)
+
             dl
                 display: flex;
                 margin 0
                 padding 10px
                 border-bottom 1px dotted #f4f8fc
+
                 dt
-                    width 80px
+                    width 100px
                     vertical-align top
                     color #666
                     display flex
@@ -293,49 +331,109 @@
                     padding-right 10px
                     box-sizing border-box
                     border-right 1px solid #dddddd
+
                 dd
                     flex 1
                     margin 0
                     text-align left
                     padding-left 10px
-        .condition-sort-list
-            list-style none
-            margin 0
-            padding 0 10px
-            li
-                position relative
-                float left
-                height 27px
-                line-height 27px
-                margin-right 10px
-                &hover
-                    a
-                        color #3B9DE8
-                a
-                    display block
-                    cursor pointer
-                    height 27px
-                    line-height 27px
-                    padding 0 16px
-                    border-radius 3px
-                    white-space nowrap
-                    color#333
-                    font-size12px
-                    &.selected
-                        color #fff
-                        background #52c41a
-                    &hover
-                        color #3B9DE8
+
+                    label
+                        font-size 12px
+                        margin 0 10px
+
+                    span
+                        display inline-block
+                        width 120px
+                        cursor pointer
+                        height 27px
+                        line-height 27px
+                        border-radius 3px
+                        text-align center
+                        white-space nowrap
+                        color #333
+                        font-size 12px
+
+                        &.selected
+                            color #fff
+                            background #52c41a
+                            &:hover
+                                color #fff
+
+                        &:hover
+                            color #52c41a
+        .search_filter_box
+            display flex
+            padding 10px
+            background #fff
+            border-bottom #E4E7ED
+            .videoClassSort
+                width 400px
+            .videoTimeSort
+                flex 1
+                text-align right
+        .video_content
+            display: table;
+            cursor pointer
+            img
+                display table-cell
+                padding-right 10px
+                border-radius 2px
+                width 60px
+                height 80px
+            .video-inner
+                display table-cell
+                text-align left
+                font-size 14px
+                vertical-align middle
+                h5
+                    font-size 14px
+                    color #333
+                    letter-spacing 0
+                    text-align justify
+                    line-height 22px
+                    margin 0
+                    font-weight normal
+                p
+                    margin 0
+                    color #999
+                    line-height 40px
+                    .el-tag
+                        &:hover
+                            background #caddfd
+                        +.el-tag
+                            margin-left: 10px;
+        .video_anchor
+            h5
+                cursor pointer
+                color #398ad9
+                font-size 14px
+                text-align left
+                font-weight normal
+            p
+                color #999
+    .comment_page
+        height 50px
+        margin-bottom 15px
+</style>
+<style lang="stylus">
+    .hot_video
+
+
         .el-tabs__nav-wrap
             background #fff
+
         .el-tabs__active-bar
             background #52c41a
+
         .el-tabs__item
             height 50px
             line-height 50px
             color #595959
+
             &:hover
                 color #52c41a
+
             &.is-active
                 border-bottom 3px solid #52c41a
                 box-sizing border-box
