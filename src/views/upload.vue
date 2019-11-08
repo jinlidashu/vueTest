@@ -5,6 +5,7 @@
                 <el-upload
                         class="upload-demo"
                         ref="upload"
+                        action="https://jsonplaceholder.typicode.com/posts/"
                         :on-preview="handlePreview"
                         :on-remove="handleRemove"
                         :on-change="handleChange"
@@ -50,6 +51,14 @@
             handleChange(file, fileList) {
                 console.log(file, fileList)
                 this.fileList = fileList
+            },
+            uploadSectionFile(){
+                const azure = require("@assets/bundle/azure-storage.file.min");
+                var fileService = azure.createFileService(
+                    'meezaoanalysis',
+                    'HDgmUPpgbvoxFFbxdXKkoGffP9SPbr/AA4BYwfUH7UYGpfo4BbIrAsQwouU4YAXTvoQ+ytXe6Jvr36cp2nVTgg==',
+                    'https://meezaoanalysis.file.core.windows.net'
+                );
             },
             submitUpload() {
                 console.log(this.fileList)

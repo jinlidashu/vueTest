@@ -63,7 +63,7 @@
                         </div>
                     </el-tab-pane>
                     <el-tab-pane label="监控历史" name="second">
-                        <span slot="label"><i class="el-icon-document"></i> 我的行程</span>
+                        <span slot="label"><i class="el-icon-document"></i> 监控历史</span>
                         <div class="monitor_historic">
                             监控历史
                         </div>
@@ -123,6 +123,34 @@
         position absolute
         top 20px
         right 20px
+    .monitor_Type_radio
+        height 58px
+        margin-bottom 30px
+    .monitor_radio_box
+        .m_radio_title
+            color #585858
+            padding-bottom 20px
+            font-size 14px
+        .m_radio_search
+            margin-bottom 20px
+            .error
+                color #f00
+                font-size 12px
+                margin-top 10px
+
+    .praiseRemind
+        height 25px
+        label
+            color #999
+        .startRemind
+            margin-top 10px
+            color #9d9d9d
+    .monitor_duration
+        h5
+            color: #585858
+            font-weight normal
+            font-size 15px
+            margin-bottom 20px
     .monitor_more
         h5
             color #585858
@@ -171,10 +199,12 @@
                     border-color #52c41a
                     background #52c41a
                 +.el-radio__label
+                    color #606266
                     span
                         color #333
                         font-size 16px
                     p
                         color #999
+
 
 </style>
