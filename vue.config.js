@@ -11,7 +11,8 @@ module.exports = {
             'element-ui': 'ELEMENT',
             'vue-router': 'VueRouter',
             vuex: 'Vuex',
-            axios: 'axios'
+            axios: 'axios',
+            echarts: 'echarts'
         }
     },
     chainWebpack: config => {
@@ -22,7 +23,8 @@ module.exports = {
                 'https://cdn.staticfile.org/vue-router/3.1.3/vue-router.min.js',
                 'https://cdn.staticfile.org/vuex/3.1.1/vuex.min.js',
                 'https://cdn.staticfile.org/axios/0.19.0-beta.1/axios.min.js',
-                'https://cdn.staticfile.org/element-ui/2.12.0/index.js'
+                'https://cdn.staticfile.org/element-ui/2.12.0/index.js',
+                'https://cdn.staticfile.org/echarts/4.4.0-rc.1/echarts.min.js'
             ]
         };
         // html中添加cdn

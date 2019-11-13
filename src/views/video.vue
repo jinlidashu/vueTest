@@ -11,23 +11,23 @@
     export default {
         name: "monitor_goods",
         data(){
-          return {
-              player: null,
-              options:{
-                  autoplay: true,
-                  controls: true,
-                  poster:"//vjs.zencdn.net/v/oceans.png",
-                  preload:"auto",
-                  'data-setup':'{}',
-                  sources: [
-                      {
-                          src:
-                              "//vjs.zencdn.net/v/oceans.mp4",
-                          type: "video/mp4"
-                      }
-                  ]
-              }
-          }
+            return {
+                player: null,
+                options:{
+                    autoplay: true,
+                    controls: true,
+                    poster:"//vjs.zencdn.net/v/oceans.png",
+                    preload:"auto",
+                    'data-setup':'{}',
+                    sources: [
+                        {
+                            src:
+                                "//vjs.zencdn.net/v/oceans.mp4",
+                            type: "video/mp4"
+                        }
+                    ]
+                }
+            }
         },
         mounted() {
             console.log('this.$video')

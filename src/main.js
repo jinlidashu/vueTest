@@ -2,8 +2,15 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts;
 import './stylus/liang-ui.styl'
 import './stylus/element.styl'
+
+import Video from 'video.js'
+import 'video.js/dist/video-js.css'
+
+Vue.prototype.$video = Video;
 
 Vue.config.productionTip = false
 new Vue({
