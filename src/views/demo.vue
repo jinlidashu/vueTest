@@ -42,6 +42,15 @@
                             <p class="brand">品牌：<span class="b1">西艾</span>售价：<span class="b2">￥14.9</span></p>
                         </div>
                     </div>
+                    <div class="monitor_goodsNum_flex">
+                        <div class="goods_flex1">
+                            抖音浏览量
+                            <span>432.6w</span>
+                        </div>
+                        <div class="goods_flex1"></div>
+                        <div class="goods_flex1"></div>
+                        <div class="goods_flex1"></div>
+                    </div>
                 </div>
             </el-main>
         </el-container>
@@ -106,6 +115,7 @@
         min-height 96px
         margin-bottom 24px
         padding 24px
+        border-bottom 1px solid #f5f5f5
         .monitor_goods_flex
             display flex
             img
@@ -115,20 +125,25 @@
                 float left
                 margin-right 14px
                 vertical-align middle
-            .goods_flex1
-                flex 1
-                h5
+        .monitor_goodsNum_flex
+            display flex
+            padding 20px 0
+            >.goods_flex1
+                border-right 1px solid #f5f5f5
+        .goods_flex1
+            flex 1
+            h5
+                color #333
+                line-height 25px
+                margin-bottom 15px
+            .brand
+                color #8c8c8c
+                font-size 14px
+                .b1
                     color #333
-                    line-height 25px
-                    margin-bottom 15px
-                .brand
-                    color #8c8c8c
-                    font-size 14px
-                    .b1
-                        color #333
-                        margin-right 20px
-                    .b2
-                        font-size 16px
-                        color #ff5000
-                        font-weight bold
+                    margin-right 20px
+                .b2
+                    font-size 16px
+                    color #ff5000
+                    font-weight bold
 </style>
