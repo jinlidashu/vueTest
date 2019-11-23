@@ -62,48 +62,51 @@
                     </div>
                     <div class="monitor_charts_box">
                         <h5>今日实时数据 <span class="time">数据更新时间：<em>2019-11-23 20:10:20</em></span></h5>
-                        <div class="monitor_left_content">
-                            <dl>
-                                <dt>
-                                    <i class="el-icon-document-add"></i>
-                                    抖音浏览量增量
-                                    <el-tooltip class="item" effect="dark" content="抖音浏览量增量：<br>商品在抖音上的总观看人数减前一天的总观看人数" placement="top"><i class="el-icon-question"></i></el-tooltip>
-                                </dt>
-                                <dd>1.9w</dd>
-                                <dd>昨日全天：3945</dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <i class="el-icon-document-add"></i>抖音浏览量增量<el-tooltip class="item" effect="dark" content="抖音浏览量增量：<br>商品在抖音上的总观看人数减前一天的总观看人数" placement="top">
-                                    <i class="el-icon-question"> </i>
-                                </el-tooltip>
-                                </dt>
-                                <dd>1.9w</dd>
-                                <dd>昨日全天：3945</dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <i class="el-icon-document-add"></i>
-                                    抖音浏览量增量
-                                    <el-tooltip class="item" effect="dark" content="抖音浏览量增量：<br>商品在抖音上的总观看人数减前一天的总观看人数" placement="top"><i class="el-icon-question"></i></el-tooltip>
-                                </dt>
-                                <dd>1.9w</dd>
-                                <dd>昨日全天：3945</dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <i class="el-icon-view"> </i>
-                                    全网销量增量
-                                    <el-tooltip class="item" effect="dark" content="全网销量增量：<br>该商品的总销量减前一天的总销量" placement="top"><i class="el-icon-question"></i></el-tooltip>
-                                </dt>
-                                <dd>1.9w</dd>
-                                <dd>昨日全天：3945</dd>
-                            </dl>
-                            <i class="el-icon-s-marketing"> </i>
-                            <i class="el-icon-link"> </i>
+                        <div class="monitor_content_box">
+                            <div class="monitor_left_content">
+                                <dl>
+                                    <dt>
+                                        <i class="el-icon-document-add"></i>
+                                        抖音浏览量增量
+                                        <el-tooltip class="item" effect="dark" content="抖音浏览量增量：<br>商品在抖音上的总观看人数减前一天的总观看人数" placement="top"><i class="el-icon-question"></i></el-tooltip>
+                                    </dt>
+                                    <dd><span>1.9w</span></dd>
+                                    <dd>昨日全天：3945</dd>
+                                </dl>
+                                <dl>
+                                    <dt>
+                                        <i class="el-icon-view"></i>
+                                        全网销量增量
+                                        <el-tooltip class="item" effect="dark" content="全网销量增量：<br>该商品的总销量减前一天的总销量" placement="top"><i class="el-icon-question"></i></el-tooltip>
+                                    </dt>
+                                    <dd><span>-17</span></dd>
+                                    <dd>昨日全天：21</dd>
+                                </dl>
+                                <dl>
+                                    <dt>
+                                        <i class="el-icon-link"></i>
+                                        关联视频数
+                                        <el-tooltip class="item" effect="dark" content="全网销量增量：<br>该商品的总销量减前一天的总销量" placement="top"><i class="el-icon-question"></i></el-tooltip>
+                                    </dt>
+                                    <dd><span>279</span></dd>
+                                    <dd>昨日全天：273</dd>
+                                </dl>
+                                <dl>
+                                    <dt>
+                                        <i class="el-icon-s-marketing"></i>
+                                        关联视频点赞增量
+                                        <el-tooltip class="item" effect="dark" content="全网销量增量：<br>该商品的总销量减前一天的总销量" placement="top"><i class="el-icon-question"></i></el-tooltip>
+                                    </dt>
+                                    <dd><span>3923</span></dd>
+                                    <dd>昨日全天：1203</dd>
+                                </dl>
 
+
+
+                            </div>
+                            <div class="monitor_right_content"></div>
                         </div>
-                        <div class="monitor_right_content"></div>
+
                     </div>
                 </div>
             </el-main>
@@ -213,4 +216,48 @@
                     font-size 16px
                     color #ff5000
                     font-weight bold
+    .monitor_charts_box
+        background #fff
+        border-radius 4px
+        min-height 96px
+        margin-bottom 24px
+        padding 24px
+        h5
+            border-bottom 1px solid #f5f5f5
+            font-size 14px
+            color #333
+            padding-bottom 20px
+            position relative
+            .time
+                float right
+                color #999
+        .monitor_content_box
+            display flex
+            .monitor_left_content
+                border-right 1px solid #f5f5f5
+                width 400px
+                margin-top 24px
+                dl
+                    float left
+                    width 50%
+                    border-bottom 1px solid #f5f5f5
+                    padding 0 0 24px 0
+                    margin-bottom 24px
+                    box-sizing border-box
+                  dt
+                    font-size 14px
+                    color #595959
+                    margin-bottom 8px
+                    border-right 1px solid #f5f5f5
+                  dd
+                    font-size 12px
+                    color #8c8c8c
+                    line-height 1.8
+                    span
+                      font-size 16px
+                      color #333
+                      margin-bottom 8px
+                      font-weight bold
+            .monitor_right_content
+                flex 1
 </style>
