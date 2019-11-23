@@ -47,9 +47,63 @@
                             抖音浏览量
                             <span>432.6w</span>
                         </div>
-                        <div class="goods_flex1"></div>
-                        <div class="goods_flex1"></div>
-                        <div class="goods_flex1"></div>
+                        <div class="goods_flex1">
+                            全网销量
+                            <span>14.5w</span>
+                        </div>
+                        <div class="goods_flex1">
+                            关联视频数
+                            <span>171</span>
+                        </div>
+                        <div class="goods_flex1">
+                            关联播主数
+                            <span>92</span>
+                        </div>
+                    </div>
+                    <div class="monitor_charts_box">
+                        <h5>今日实时数据 <span class="time">数据更新时间：<em>2019-11-23 20:10:20</em></span></h5>
+                        <div class="monitor_left_content">
+                            <dl>
+                                <dt>
+                                    <i class="el-icon-document-add"></i>
+                                    抖音浏览量增量
+                                    <el-tooltip class="item" effect="dark" content="抖音浏览量增量：<br>商品在抖音上的总观看人数减前一天的总观看人数" placement="top"><i class="el-icon-question"></i></el-tooltip>
+                                </dt>
+                                <dd>1.9w</dd>
+                                <dd>昨日全天：3945</dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <i class="el-icon-document-add"></i>抖音浏览量增量<el-tooltip class="item" effect="dark" content="抖音浏览量增量：<br>商品在抖音上的总观看人数减前一天的总观看人数" placement="top">
+                                    <i class="el-icon-question"> </i>
+                                </el-tooltip>
+                                </dt>
+                                <dd>1.9w</dd>
+                                <dd>昨日全天：3945</dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <i class="el-icon-document-add"></i>
+                                    抖音浏览量增量
+                                    <el-tooltip class="item" effect="dark" content="抖音浏览量增量：<br>商品在抖音上的总观看人数减前一天的总观看人数" placement="top"><i class="el-icon-question"></i></el-tooltip>
+                                </dt>
+                                <dd>1.9w</dd>
+                                <dd>昨日全天：3945</dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <i class="el-icon-view"> </i>
+                                    全网销量增量
+                                    <el-tooltip class="item" effect="dark" content="全网销量增量：<br>该商品的总销量减前一天的总销量" placement="top"><i class="el-icon-question"></i></el-tooltip>
+                                </dt>
+                                <dd>1.9w</dd>
+                                <dd>昨日全天：3945</dd>
+                            </dl>
+                            <i class="el-icon-s-marketing"> </i>
+                            <i class="el-icon-link"> </i>
+
+                        </div>
+                        <div class="monitor_right_content"></div>
                     </div>
                 </div>
             </el-main>
@@ -64,6 +118,8 @@
         name: "monitor_goods"
     }
 </script>
+
+
 
 <style lang="stylus" scoped>
     .goodsTit
@@ -118,6 +174,7 @@
         border-bottom 1px solid #f5f5f5
         .monitor_goods_flex
             display flex
+            margin-bottom 20px
             img
                 width 60px
                 height 60px
@@ -129,7 +186,17 @@
             display flex
             padding 20px 0
             >.goods_flex1
+                font-size 14px
+                color #8c8c8c
+                line-height 1.8
+                padding 0 20px
+                text-align center
                 border-right 1px solid #f5f5f5
+                span
+                    display block
+                    font-size 16px
+                    color #333
+                    font-weight bold
         .goods_flex1
             flex 1
             h5
